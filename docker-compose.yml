@@ -1,12 +1,12 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:15
     container_name: eopcina-db
     restart: always
     environment:
-      POSTGRES_USER: eopcina_user
-      POSTGRES_PASSWORD: eopcina_password
-      POSTGRES_DB: eopcina_db
+      - POSTGRES_USER=eopcina_user
+      - POSTGRES_PASSWORD=eopcina_password
+      - POSTGRES_DB=eopcina_db
     ports:
       - "5432:5432"
     volumes:
@@ -21,7 +21,7 @@ services:
     depends_on:
       - db
     environment:
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=eopcina_db;Username=eopcina_user;Password=eopcina_password;Trust Server Certificate=true
+      - ConnectionStrings__DefaultConnection=Host=db;Database=eopcina_db;Username=eopcina_user;Password=eopcina_password
 
 volumes:
   postgres_data:
