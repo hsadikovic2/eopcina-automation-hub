@@ -29,7 +29,7 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Host=db;Database=eopcina_db;Username=eopcina_user;Password=eopcina_password
     healthcheck:
-      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:8080/health || exit 1"]
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && exec 3<&-"]
       interval: 30s
       timeout: 10s
       retries: 3
