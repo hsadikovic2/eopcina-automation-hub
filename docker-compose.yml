@@ -11,6 +11,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eopcina_user -d eopcina_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   app:
     image: ghcr.io/hsadikovic2/eopcina:latest
@@ -19,9 +24,16 @@ services:
     ports:
       - "80:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - ConnectionStrings__DefaultConnection=Host=db;Database=eopcina_db;Username=eopcina_user;Password=eopcina_password
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   postgres_data:

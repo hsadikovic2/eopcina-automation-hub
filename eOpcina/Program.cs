@@ -33,8 +33,9 @@ builder.Services.AddDefaultIdentity<Korisnik>(options =>
 
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddHealthChecks();
 var app = builder.Build();
+app.MapHealthChecks("/health");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -69,5 +70,7 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     context.Database.Migrate();
 }
+
+
 
 app.Run();
